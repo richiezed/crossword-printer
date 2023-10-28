@@ -35,7 +35,7 @@ class PdfGenerator:
     def _get_pdf_from_url(self, url, *args, **kwargs):
         self.driver.get(url)
         time.sleep(0.3)  # allow the page to load, increase if needed
-
+#TODO: Check if logged in
         print_options = self.print_options.copy()
         result = self._send_devtools(self.driver, "Page.printToPDF", print_options)
         return base64.b64decode(result['data'])

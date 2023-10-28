@@ -2,8 +2,6 @@
 
 print_with_chrome.py
 
-requirements.txt
-
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

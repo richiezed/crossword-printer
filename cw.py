@@ -3,8 +3,8 @@ import print_with_chrome
 from PdfGenerator import PdfGenerator
 from pypdf import PdfMerger
 import os
-
-crossword_date='2023-10-23'
+#TODO: Options to 1) set today's date; or 2) use last Saturday
+crossword_date='2023-10-28'
 
 pdf_file = PdfGenerator(['https://www.theage.com.au/puzzles/crosswords/cryptic/' + crossword_date,'https://www.theage.com.au/puzzles/crosswords/quick/' + crossword_date]).main()
 
@@ -21,6 +21,6 @@ for pdf in pdfs:
 
 merger.write("result.pdf")
 merger.close()
-
-#os.system('lp -d Brother_HL-2270DW_series -o sides=two-sided-short-edge result.pdf')
+#TODO: Load printer from config, or just use default
+os.system('lp -d Brother_HL-2270DW_series -o sides=two-sided-short-edge result.pdf')
 
