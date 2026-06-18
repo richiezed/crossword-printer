@@ -11,11 +11,14 @@ import time
 from io import BytesIO
 from typing import List
 import os
+import webbrowser
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException 
 
 
 class PdfGenerator:
@@ -27,6 +30,13 @@ class PdfGenerator:
         'printBackground': False,
         'preferCSSPageSize': False,
         'pageRanges': "1",
+        'marginTop': .1,
+        'marginBottom': .1,
+
+
+      #  'paperWidth': 8.3,
+      #  'paperHeight': 11.7,
+  
     }
 
     def __init__(self, urls: List[str]):
@@ -36,6 +46,47 @@ class PdfGenerator:
         self.driver.get(url)
         time.sleep(0.3)  # allow the page to load, increase if needed
 #TODO: Check if logged in
+
+
+        #webbrowser.get("/snap/bin/chromium").open("https://www.theage.com.au")
+        #exit()
+
+        try: 
+            button=self.driver.find_element(By.ID, "myAccountMenuButton") 
+            print("Logged in, proceding to print stage") 
+        except NoSuchElementException as e: 
+            self.driver.close()
+            print("Not logged in, please log in")
+            webbrowser.get("/snap/bin/chromium").open("https://www.theage.com.au")
+            #webbrowser.get("/snap/chromium/2943/usr/lib/chromium-browser/chrome").open("https://www.theage.com.au")
+            
+            #print("/snap/chromium/current/usr/lib/chromium-browser/chrome --user-data-dir=" + os.path.expanduser("~") + "/snap/chromium/common/chromium")
+            #os.system("/snap/chromium/current/usr/lib/chromium-browser/chrome --user-data-dir=" + os.path.expanduser("~") + "/snap/chromium/common/chromium")
+            #os.system("/snap/chromium/current/usr/lib/chromium-browser/chrome --user-data-dir=" + os.path.expanduser("~") + "/snap/chromium/common/chromium" + " https://www.theage.com.au")
+
+
+            #exit()
+        #print(self.driver.find_element(By.ID, "myAccountMenuButton"))
+        #print(self.driver.find_element(By.CSS_SELECTOR, "button._2CAtX").tag_name)
+
+        
+        elem = self.driver.find_element(By.CLASS_NAME, "_5bcpS")
+        #print (elem)
+
+        # This prints the header on the left
+        self.driver.execute_script("arguments[0].removeAttribute('class')", elem) 
+
+        # This prints the header in the middle
+        #self.driver.execute_script("arguments[0].setAttribute('class', 'p3h3q EdtFg')", elem) 
+
+
+        #const element = document.getElementById('yourElementId');
+
+       # myElement.removeClass('_5bcpS')
+
+#        <header class="k4t-m"><div class="_5bcpS p3h3q EdtFg">
+#document.querySelector("#content > div > header")
+
         print_options = self.print_options.copy()
         result = self._send_devtools(self.driver, "Page.printToPDF", print_options)
         return base64.b64decode(result['data'])
@@ -83,3 +134,7 @@ class PdfGenerator:
             self.driver.close()
 
         return result
+
+
+       # <button aria-controls="myAccountMenu" aria-expanded="false" class="_3s-xg _2CAtX" id="myAccountMenuButton" data-testid="my-account-menu"><span class="_22xoE">Richie Z</span><span class="_2Rpde"><svg aria-hidden="true" class="QMY9O" focusable="false" height="24px" width="24px"><use xlink:href="#icon-account"></use></svg></span></button>
+      #  <span class="_22xoE">Richie Z</span>
