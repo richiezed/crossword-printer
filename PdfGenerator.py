@@ -133,7 +133,7 @@ class PdfGenerator:
         webdriver_options.add_argument('--disable-gpu')
         #webdriver_options.add_argument('--no-sandbox')
         webdriver_options.add_argument('--disable-software-rasterizer')
-        home_dir = os.path.expanduser("~") + "/"
+        home_dir = os.path.expanduser("~")
         chrome_profile= home_dir + CHROMIUM_PROFILE
         #webdriver_options.add_argument("--user-data-dir=/cw/config") 
         #webdriver_options.add_argument("--profile-directory=chrome-profile")

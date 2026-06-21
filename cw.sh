@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASE_PATH=/home/richard/develop/crossword_printer
+BASE_PATH=/home/richard/prod/crossword-printer
 
 source $BASE_PATH/.venv/bin/activate
 cd $BASE_PATH
