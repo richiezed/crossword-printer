@@ -18,8 +18,21 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException 
+from selenium.common.exceptions import NoSuchElementException
+from dotenv import load_dotenv
 
+#Environment variables in use
+load_dotenv()
+
+CHROMIUM_PATH = os.getenv("CHROMIUM_PATH")
+CHROMIUM_PROFILE = os.getenv("CHROMIUM_PROFILE")
+WEBDRIVER_PATH = os.getenv("WEBDRIVER_PATH")
+PAGE_URL = os.getenv("PAGE_URL")
+
+print("CHROMIUM_PATH " + str(CHROMIUM_PATH))
+print("CHROMIUM_PROFILE " + str(CHROMIUM_PROFILE))
+print("WEBDRIVER_PATH " + str(WEBDRIVER_PATH))
+print("PAGE_URL " + str(PAGE_URL))
 
 class PdfGenerator:
     driver = None
@@ -57,8 +70,7 @@ class PdfGenerator:
         except NoSuchElementException as e: 
             self.driver.close()
             print("Not logged in, please log in")
-            webbrowser.get("/snap/bin/chromium").open("https://www.theage.com.au")
-            #webbrowser.get("/snap/chromium/2943/usr/lib/chromium-browser/chrome").open("https://www.theage.com.au")
+            webbrowser.get(CHROMIUM_PATH).open(PAGE_URL) #THis may not be needed, this is on an exception path!
             
             #print("/snap/chromium/current/usr/lib/chromium-browser/chrome --user-data-dir=" + os.path.expanduser("~") + "/snap/chromium/common/chromium")
             #os.system("/snap/chromium/current/usr/lib/chromium-browser/chrome --user-data-dir=" + os.path.expanduser("~") + "/snap/chromium/common/chromium")
@@ -117,16 +129,23 @@ class PdfGenerator:
         webdriver_options = ChromeOptions()
         webdriver_options.add_argument('--headless')
         webdriver_options.add_argument('--disable-gpu')
-        home_dir = os.path.expanduser("~")
-        chrome_profile= home_dir + "/snap/chromium/common/chromium"
-
-
+        webdriver_options.add_argument('--disable-dev-shm-usage')
+        webdriver_options.add_argument('--disable-gpu')
+        #webdriver_options.add_argument('--no-sandbox')
+        webdriver_options.add_argument('--disable-software-rasterizer')
+        home_dir = os.path.expanduser("~") + "/"
+        chrome_profile= home_dir + CHROMIUM_PROFILE
+        #webdriver_options.add_argument("--user-data-dir=/cw/config") 
+        #webdriver_options.add_argument("--profile-directory=chrome-profile")
+        print(chrome_profile)
         webdriver_options.add_argument('--user-data-dir=' + chrome_profile)
-        chromium_path = "/snap/chromium/current/usr/lib/chromium-browser/chrome"
+       # webdriver_options.add_argument('--user-data-dir=/cw/config/chrome-profile')
+        chromium_path = CHROMIUM_PATH
         webdriver_options.binary_location = chromium_path
-
+        
         try:
-            chromedriver_path = ChromeService(executable_path="/snap/chromium/current/usr/lib/chromium-browser/chromedriver")
+            chromedriver_path = ChromeService(executable_path=WEBDRIVER_PATH)
+            #self.driver = webdriver.Chrome(service=chromedriver_path, options=webdriver_options)
             self.driver = webdriver.Chrome(service=chromedriver_path, options=webdriver_options)
             result = self._generate_pdfs()
 

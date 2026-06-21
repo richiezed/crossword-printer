@@ -1,0 +1,24 @@
+services:
+  cw:
+    image: richiezed/cw
+    container_name: cw
+    stdin_open: true
+    tty: true
+    shm_size: '2gb'
+    build: .
+    network_mode: host
+    ports:
+      - "4444:4444"
+      - "7900:7900"
+    volumes:
+      - ./config/:/cw/config/:rw
+    environment:
+      - CHROMIUM_PATH=/usr/lib/chromium/chromium
+      - CHROMIUM_PROFILE=/home/seluser/.config
+      - WEBDRIVER_PATH=/usr/bin/chromedriver
+      - PAGE_URL=https://www.theage.com.au
+      #- DATABASE_USER=${DB_USER}
+      #- DATABASE_PASS=${DB_PASSWORD}
+      #- APP_DEBUG=${DEBUG:-false} # Uses 'false' if DEBUG is unset
+      
+

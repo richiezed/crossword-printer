@@ -16,7 +16,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--today", action="store_true", help="Use this flag to print today's crossword instead of the the one that would otherwise be printed")
 parser.add_argument("-d", "--day", default=6, type=int, choices=range(1,8), metavar='[1-7]', help="The day of the week to be printed (Mon to Sun), if you want to override Saturday.")
 parser.add_argument("-b", "--back", default=0, metavar='<n>', type=int, help="<n> is number of weeks back.")
-parser.add_argument("-c", "--copies", default=1, type=int, choices=range(1,6), metavar='[0-5]', help="The number of copies to be printed.")
+parser.add_argument("-c", "--copies", default=1, type=int, choices=range(0,6), metavar='[0-5]', help="The number of copies to be printed.")
 
 args = parser.parse_args()
 #print(args.weeksback)
